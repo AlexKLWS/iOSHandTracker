@@ -1,0 +1,15 @@
+//
+//  HandTracker-Prefix.pch
+//  HandTracker
+//
+//  Created by Alex Korzh on 2/13/19.
+//  Copyright © 2019 Alex Korzh. All rights reserved.
+//
+
+#ifndef HandTracker_Prefix_pch
+#define HandTracker_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif /* HandTracker_Prefix_pch */
