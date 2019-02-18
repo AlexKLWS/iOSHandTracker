@@ -7,8 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD3529B522170FA70076BD75 /* ImageSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD3529AD22170FA60076BD75 /* ImageSource.cpp */; };
+		CD3529B622170FA70076BD75 /* Tracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD3529AF22170FA70076BD75 /* Tracker.cpp */; };
+		CD3529B722170FA70076BD75 /* HandGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD3529B022170FA70076BD75 /* HandGesture.cpp */; };
+		CD3529B822170FA70076BD75 /* ColorSampleROI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD3529B122170FA70076BD75 /* ColorSampleROI.cpp */; };
+		CD3529BB221725DF0076BD75 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD3529BA221725DF0076BD75 /* AVFoundation.framework */; };
+		CD3529BD22172B7C0076BD75 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD3529BC22172B7C0076BD75 /* CoreMedia.framework */; };
 		CDD96B5122133A1900F410A2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CDD96B5022133A1900F410A2 /* AppDelegate.m */; };
-		CDD96B5422133A1900F410A2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CDD96B5322133A1900F410A2 /* ViewController.m */; };
+		CDD96B5422133A1900F410A2 /* MainViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CDD96B5322133A1900F410A2 /* MainViewController.mm */; };
 		CDD96B5722133A1900F410A2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDD96B5522133A1900F410A2 /* Main.storyboard */; };
 		CDD96B5922133A1D00F410A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CDD96B5822133A1D00F410A2 /* Assets.xcassets */; };
 		CDD96B5C22133A1D00F410A2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CDD96B5A22133A1D00F410A2 /* LaunchScreen.storyboard */; };
@@ -36,12 +42,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CD3529AD22170FA60076BD75 /* ImageSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ImageSource.cpp; sourceTree = "<group>"; };
+		CD3529AE22170FA70076BD75 /* HandGesture.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HandGesture.hpp; sourceTree = "<group>"; };
+		CD3529AF22170FA70076BD75 /* Tracker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tracker.cpp; sourceTree = "<group>"; };
+		CD3529B022170FA70076BD75 /* HandGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HandGesture.cpp; sourceTree = "<group>"; };
+		CD3529B122170FA70076BD75 /* ColorSampleROI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorSampleROI.cpp; sourceTree = "<group>"; };
+		CD3529B222170FA70076BD75 /* ImageSource.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ImageSource.hpp; sourceTree = "<group>"; };
+		CD3529B322170FA70076BD75 /* Tracker.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Tracker.hpp; sourceTree = "<group>"; };
+		CD3529B422170FA70076BD75 /* ColorSampleROI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ColorSampleROI.hpp; sourceTree = "<group>"; };
+		CD3529BA221725DF0076BD75 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		CD3529BC22172B7C0076BD75 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		CD4133032213776400B7A389 /* HandTracker-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HandTracker-Prefix.pch"; sourceTree = "<group>"; };
 		CDD96B4C22133A1900F410A2 /* HandTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HandTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CDD96B4F22133A1900F410A2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		CDD96B5022133A1900F410A2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		CDD96B5222133A1900F410A2 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		CDD96B5322133A1900F410A2 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		CDD96B5222133A1900F410A2 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		CDD96B5322133A1900F410A2 /* MainViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MainViewController.mm; sourceTree = "<group>"; };
 		CDD96B5622133A1900F410A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		CDD96B5822133A1D00F410A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CDD96B5B22133A1D00F410A2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -61,6 +77,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD3529BD22172B7C0076BD75 /* CoreMedia.framework in Frameworks */,
+				CD3529BB221725DF0076BD75 /* AVFoundation.framework in Frameworks */,
 				CDD96B8222135A0700F410A2 /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,6 +100,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		CD3529A922170D8F0076BD75 /* Tracker */ = {
+			isa = PBXGroup;
+			children = (
+				CD3529B022170FA70076BD75 /* HandGesture.cpp */,
+				CD3529AE22170FA70076BD75 /* HandGesture.hpp */,
+				CD3529AD22170FA60076BD75 /* ImageSource.cpp */,
+				CD3529B222170FA70076BD75 /* ImageSource.hpp */,
+				CD3529AF22170FA70076BD75 /* Tracker.cpp */,
+				CD3529B322170FA70076BD75 /* Tracker.hpp */,
+				CD3529B122170FA70076BD75 /* ColorSampleROI.cpp */,
+				CD3529B422170FA70076BD75 /* ColorSampleROI.hpp */,
+			);
+			path = Tracker;
+			sourceTree = "<group>";
+		};
+		CD3529B9221725DF0076BD75 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CD3529BC22172B7C0076BD75 /* CoreMedia.framework */,
+				CD3529BA221725DF0076BD75 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		CDD96B4322133A1900F410A2 = {
 			isa = PBXGroup;
 			children = (
@@ -90,6 +132,7 @@
 				CDD96B6722133A1D00F410A2 /* HandTrackerTests */,
 				CDD96B7222133A1D00F410A2 /* HandTrackerUITests */,
 				CDD96B4D22133A1900F410A2 /* Products */,
+				CD3529B9221725DF0076BD75 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -106,10 +149,11 @@
 		CDD96B4E22133A1900F410A2 /* HandTracker */ = {
 			isa = PBXGroup;
 			children = (
+				CD3529A922170D8F0076BD75 /* Tracker */,
 				CDD96B4F22133A1900F410A2 /* AppDelegate.h */,
 				CDD96B5022133A1900F410A2 /* AppDelegate.m */,
-				CDD96B5222133A1900F410A2 /* ViewController.h */,
-				CDD96B5322133A1900F410A2 /* ViewController.m */,
+				CDD96B5222133A1900F410A2 /* MainViewController.h */,
+				CDD96B5322133A1900F410A2 /* MainViewController.mm */,
 				CDD96B5522133A1900F410A2 /* Main.storyboard */,
 				CDD96B5822133A1D00F410A2 /* Assets.xcassets */,
 				CDD96B5A22133A1D00F410A2 /* LaunchScreen.storyboard */,
@@ -268,8 +312,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CDD96B5422133A1900F410A2 /* ViewController.m in Sources */,
+				CD3529B522170FA70076BD75 /* ImageSource.cpp in Sources */,
+				CDD96B5422133A1900F410A2 /* MainViewController.mm in Sources */,
+				CD3529B722170FA70076BD75 /* HandGesture.cpp in Sources */,
 				CDD96B5F22133A1D00F410A2 /* main.m in Sources */,
+				CD3529B822170FA70076BD75 /* ColorSampleROI.cpp in Sources */,
+				CD3529B622170FA70076BD75 /* Tracker.cpp in Sources */,
 				CDD96B5122133A1900F410A2 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
