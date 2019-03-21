@@ -45,47 +45,55 @@ void Tracker::normalizeColors() {
 	// to all of the different boundries
 	for (int i = 1; i < NSAMPLES; i++) {
 		for (int j = 0; j < 3; j++) {
-			c_lower[i][j] = c_lower[0][j];
-			c_upper[i][j] = c_upper[0][j];
+			lowerColorBounds[i][j] = lowerColorBounds[0][j];
+			upperColorBounds[i][j] = upperColorBounds[0][j];
 		}
 	}
 	// normalize all boundries so that 
 	// threshold is whithin 0-255
 	for (int i = 0; i < NSAMPLES; i++) {
-		if ((averageColors[i][0] - c_lower[i][0]) < 0) {
-			c_lower[i][0] = averageColors[i][0];
-		} if ((averageColors[i][1] - c_lower[i][1]) < 0) {
-			c_lower[i][1] = averageColors[i][1];
-		} if ((averageColors[i][2] - c_lower[i][2]) < 0) {
-			c_lower[i][2] = averageColors[i][2];
-		} if ((averageColors[i][0] + c_upper[i][0]) > 255) {
-			c_upper[i][0] = 255 - averageColors[i][0];
-		} if ((averageColors[i][1] + c_upper[i][1]) > 255) {
-			c_upper[i][1] = 255 - averageColors[i][1];
-		} if ((averageColors[i][2] + c_upper[i][2]) > 255) {
-			c_upper[i][2] = 255 - averageColors[i][2];
+		if ((averageColors[i][0] - lowerColorBounds[i][0]) < 0) {
+			lowerColorBounds[i][0] = averageColors[i][0];
+		}
+        if ((averageColors[i][1] - lowerColorBounds[i][1]) < 0) {
+			lowerColorBounds[i][1] = averageColors[i][1];
+		}
+        if ((averageColors[i][2] - lowerColorBounds[i][2]) < 0) {
+			lowerColorBounds[i][2] = averageColors[i][2];
+		}
+        if ((averageColors[i][0] + upperColorBounds[i][0]) > 255) {
+			upperColorBounds[i][0] = 255 - averageColors[i][0];
+		}
+        if ((averageColors[i][1] + upperColorBounds[i][1]) > 255) {
+			upperColorBounds[i][1] = 255 - averageColors[i][1];
+		}
+        if ((averageColors[i][2] + upperColorBounds[i][2]) > 255) {
+			upperColorBounds[i][2] = 255 - averageColors[i][2];
 		}
 	}
 }
 
-void Tracker::produceBinaries(ImageSource *imageSrc) {
+Mat Tracker::generateBinaryFrom(Mat& downsampledFrame) {
 	Scalar lowerBound;
 	Scalar upperBound;
+    vector<Mat> bwList;
+    Mat binary;
 	for (int i = 0; i < NSAMPLES; i++) {
 		normalizeColors();
-		lowerBound = Scalar(averageColors[i][0] - c_lower[i][0], averageColors[i][1] - c_lower[i][1], averageColors[i][2] - c_lower[i][2]);
-		upperBound = Scalar(averageColors[i][0] + c_upper[i][0], averageColors[i][1] + c_upper[i][1], averageColors[i][2] + c_upper[i][2]);
-		imageSrc->bwList.push_back(Mat(imageSrc->downsampled.rows, imageSrc->downsampled.cols, CV_8U));
-		inRange(imageSrc->downsampled, lowerBound, upperBound, imageSrc->bwList[i]);
+		lowerBound = Scalar(averageColors[i][0] - lowerColorBounds[i][0], averageColors[i][1] - lowerColorBounds[i][1], averageColors[i][2] - lowerColorBounds[i][2]);
+		upperBound = Scalar(averageColors[i][0] + upperColorBounds[i][0], averageColors[i][1] + upperColorBounds[i][1], averageColors[i][2] + upperColorBounds[i][2]);
+		bwList.push_back(Mat(downsampledFrame.rows, downsampledFrame.cols, CV_8U));
+		inRange(downsampledFrame, lowerBound, upperBound, bwList[i]);
 	}
-	imageSrc->bwList[0].copyTo(imageSrc->binary);
+	bwList[0].copyTo(binary);
 	for (int i = 1; i < NSAMPLES; i++) {
-		imageSrc->binary += imageSrc->bwList[i];
+		binary += bwList[i];
 	}
-	medianBlur(imageSrc->binary, imageSrc->binary, 7);
+	medianBlur(binary, binary, 7);
+    return binary;
 }
 
-int Tracker::findBiggestContour(vector<vector<cv::Point> > contours) {
+int Tracker::findBiggestContour(vector<vector<cv::Point>> contours) {
 	int indexOfBiggestContour = -1;
 	unsigned long sizeOfBiggestContour = 0;
 	for (int i = 0; i < contours.size(); i++) {
@@ -97,71 +105,70 @@ int Tracker::findBiggestContour(vector<vector<cv::Point> > contours) {
 	return indexOfBiggestContour;
 }
 
-void Tracker::drawHandContours(ImageSource *m, HandGesture *hg) {
-	drawContours(m->original, hg->hullPoint, hg->cIdx, cv::Scalar(200, 0, 0), 2, 8, vector<Vec4i>(), 0, cv::Point());
+void Tracker::drawHandContours(ImageSource *m) {
+	drawContours(m->original, handDetector.hullPoint, handDetector.cIdx, Scalar(200, 0, 0), 2, 8, vector<Vec4i>(), 0, cv::Point());
 
-	rectangle(m->original, hg->bRect.tl(), hg->bRect.br(), Scalar(0, 0, 200));
-	vector<Vec4i>::iterator d = hg->defects[hg->cIdx].begin();
+	rectangle(m->original, handDetector.bRect.tl(), handDetector.bRect.br(), Scalar(0, 0, 200));
+	vector<Vec4i>::iterator d = handDetector.defects[handDetector.cIdx].begin();
 
 	vector<Mat> channels;
 	Mat result;
 	for (int i = 0; i < 3; i++)
 		channels.push_back(m->binary);
 	merge(channels, result);
-	drawContours(result, hg->hullPoint, hg->cIdx, cv::Scalar(0, 0, 250), 10, 8, vector<Vec4i>(), 0, cv::Point());
+	drawContours(result, handDetector.hullPoint, handDetector.cIdx, Scalar(0, 0, 250), 10, 8, vector<Vec4i>(), 0, cv::Point());
 
 
-	while (d != hg->defects[hg->cIdx].end()) {
+	while (d != handDetector.defects[handDetector.cIdx].end()) {
 		Vec4i& v = (*d);
 		int startidx = v[0];
-        cv::Point ptStart(hg->contours[hg->cIdx][startidx]);
+        cv::Point ptStart(handDetector.contours[handDetector.cIdx][startidx]);
 		int endidx = v[1];
-        cv::Point ptEnd(hg->contours[hg->cIdx][endidx]);
+        cv::Point ptEnd(handDetector.contours[handDetector.cIdx][endidx]);
 		int faridx = v[2];
-        cv::Point ptFar(hg->contours[hg->cIdx][faridx]);
+        cv::Point ptFar(handDetector.contours[handDetector.cIdx][faridx]);
 		circle(result, ptFar, 9, Scalar(0, 205, 0), 5);
 
 		d++;
 	}
 }
 
-void Tracker::makeContours(ImageSource *m, HandGesture* hg) {
+void Tracker::makeContours(ImageSource *m) {
 	Mat aBw;
 	pyrUp(m->binary, m->binary);
 	m->binary.copyTo(aBw);
-    findContours(aBw, hg->contours, RETR_EXTERNAL, CHAIN_APPROX_NONE);
-	hg->initVectors();
-	hg->cIdx = findBiggestContour(hg->contours);
-	if (hg->cIdx != -1) {
-		hg->bRect = boundingRect(Mat(hg->contours[hg->cIdx]));
-        handCoordinates = (hg->bRect.br() + hg->bRect.tl())*0.5;
-		convexHull(Mat(hg->contours[hg->cIdx]), hg->hullPoint[hg->cIdx], false, true);
-		convexHull(Mat(hg->contours[hg->cIdx]), hg->hullIndex[hg->cIdx], false, false);
-		approxPolyDP(Mat(hg->hullPoint[hg->cIdx]), hg->hullPoint[hg->cIdx], 18, true);
-		if (hg->contours[hg->cIdx].size() > 3) {
-			convexityDefects(hg->contours[hg->cIdx], hg->hullIndex[hg->cIdx], hg->defects[hg->cIdx]);
-			hg->eleminateDefects();
+    findContours(aBw, handDetector.contours, RETR_EXTERNAL, CHAIN_APPROX_NONE);
+	handDetector.initVectors();
+	handDetector.cIdx = findBiggestContour(handDetector.contours);
+	if (handDetector.cIdx != -1) {
+		handDetector.bRect = boundingRect(Mat(handDetector.contours[handDetector.cIdx]));
+        handCoordinates = (handDetector.bRect.br() + handDetector.bRect.tl())*0.5;
+		convexHull(Mat(handDetector.contours[handDetector.cIdx]), handDetector.hullPoint[handDetector.cIdx], false, true);
+		convexHull(Mat(handDetector.contours[handDetector.cIdx]), handDetector.hullIndex[handDetector.cIdx], false, false);
+		approxPolyDP(Mat(handDetector.hullPoint[handDetector.cIdx]), handDetector.hullPoint[handDetector.cIdx], 18, true);
+		if (handDetector.contours[handDetector.cIdx].size() > 3) {
+			convexityDefects(handDetector.contours[handDetector.cIdx], handDetector.hullIndex[handDetector.cIdx], handDetector.defects[handDetector.cIdx]);
+			handDetector.eleminateDefects();
 		}
-		bool isHand = hg->detectIfHand();
-		hg->printGestureInfo(m->original);
+		bool isHand = handDetector.detectIfHand();
+		handDetector.printGestureInfo(m->original);
 		if (isHand) {
-			hg->getFingertips(m);
-			hg->drawFingertips(m);
-			drawHandContours(m, hg);
+			handDetector.getFingertips(m);
+			handDetector.drawFingertips(m);
+			drawHandContours(m);
 		}
 	}
 }
 
 void Tracker::startTracking() {
     for (int i = 0; i < NSAMPLES; i++) {
-        c_lower[i][0] = 7;
-        c_upper[i][0] = 21;
-        c_lower[i][1] = 0;
-        c_upper[i][1] = 16;
-        c_lower[i][2] = 5;
-        c_upper[i][2] = 10;
+        lowerColorBounds[i][0] = 7;
+        upperColorBounds[i][0] = 21;
+        lowerColorBounds[i][1] = 0;
+        upperColorBounds[i][1] = 16;
+        lowerColorBounds[i][2] = 5;
+        upperColorBounds[i][2] = 10;
     }
-//    _currentState = TRACKING;
 }
 
 void Tracker::getColorSamples(Mat& image) {
@@ -176,13 +183,14 @@ void Tracker::getColorSamples(Mat& image) {
 }
 
 void Tracker::tracking(ImageSource imageSrc) {
-    pyrDown(imageSrc.original, imageSrc.downsampled);
-    blur(imageSrc.downsampled, imageSrc.downsampled, Size2i(3, 3));
-    cvtColor(imageSrc.downsampled, imageSrc.downsampled, ORIGCOL2COL);
-    produceBinaries(&imageSrc);
-    cvtColor(imageSrc.downsampled, imageSrc.downsampled, COL2ORIGCOL);
-    makeContours(&imageSrc, &handGesture);
-    handGesture.getFingerNumber(&imageSrc);
+    Mat downsampled;
+    pyrDown(imageSrc.original, downsampled);
+    blur(downsampled, downsampled, Size2i(3, 3));
+    cvtColor(downsampled, downsampled, ORIGCOL2COL);
+    Mat binary = generateBinaryFrom(downsampled);
+    cvtColor(downsampled, downsampled, COL2ORIGCOL);
+    makeContours(&imageSrc);
+    handDetector.getFingerNumber(&imageSrc);
     pyrDown(imageSrc.binary, imageSrc.binary);
     pyrDown(imageSrc.binary, imageSrc.binary);
     cv::Rect roi(cv::Point(3 * imageSrc.original.cols / 4, 0), imageSrc.binary.size());
@@ -192,7 +200,7 @@ void Tracker::tracking(ImageSource imageSrc) {
         channels.push_back(imageSrc.binary);
     merge(channels, result);
     result.copyTo(imageSrc.original(roi));
-    imageSource.displayed = imageSource.original.clone();
+//    imageSource.displayed = imageSource.original.clone();
 }
 
 void Tracker::drawColorSampleRegions(Mat& image) {

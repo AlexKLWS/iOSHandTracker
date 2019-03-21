@@ -22,21 +22,21 @@ private:
     const int fontFace = FONT_HERSHEY_PLAIN;
     const int squareLength = 20;
     int averageColors[NSAMPLES][3];
-    int c_lower[NSAMPLES][3];
-    int c_upper[NSAMPLES][3];
+    int lowerColorBounds[NSAMPLES][3];
+    int upperColorBounds[NSAMPLES][3];
     vector <ColorSampleROI> colorSampleRegions;
     Point2f handCoordinates;
     
     ImageSource imageSource;
-    HandGesture handGesture;
+    HandGesture handDetector;
     
     int getMedian(vector<int> values);
     void getAverageColor(ColorSampleROI roi, int averages[3]);
     void normalizeColors();
-    void produceBinaries(ImageSource *imageSrc);
+    Mat generateBinaryFrom(Mat& downsampledFrame);
     int findBiggestContour(vector<vector<cv::Point> > contours);
-    void drawHandContours(ImageSource *m, HandGesture *hg);
-    void makeContours(ImageSource *m, HandGesture* hg);
+    void drawHandContours(ImageSource *m);
+    void makeContours(ImageSource *m);
 public:
     Tracker();
     void startTracking();

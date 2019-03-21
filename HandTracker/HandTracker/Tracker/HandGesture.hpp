@@ -41,7 +41,7 @@ private:
 	string bool2string(bool tf);
 	int fontFace;
 	int prevNrFingerTips;
-	void checkForOneFinger(ImageSource *m);
+	void checkForOneFinger(Mat& frame);
 	float getAngle(cv::Point s, cv::Point f, cv::Point e);
 	vector<int> fingerNumbers;
 	void analyzeContours();

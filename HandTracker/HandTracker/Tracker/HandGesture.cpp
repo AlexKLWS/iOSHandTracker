@@ -204,9 +204,8 @@ void HandGesture::eleminateDefects(){
 // remove endpoint of convexity defects if they are at the same fingertip
 void HandGesture::removeRedundantEndPoints(vector<Vec4i> newDefects){
 	Vec4i temp;
-	float avgX, avgY;
 	float tolerance=bRect_width/6;
-	int startidx, endidx, faridx;
+	int startidx, endidx;
 	int startidx2, endidx2;
 	for(int i=0;i<newDefects.size();i++){
 		for(int j=i;j<newDefects.size();j++){
@@ -227,35 +226,36 @@ void HandGesture::removeRedundantEndPoints(vector<Vec4i> newDefects){
 // convexity defects does not check for one finger
 // so another method has to check when there are no
 // convexity defects
-void HandGesture::checkForOneFinger(ImageSource *m){
-	int yTol=bRect.height/6;
+void HandGesture::checkForOneFinger(Mat& frame){
+	int yTol = bRect.height / 6;
 	cv::Point highestP;
-	highestP.y=m->original.rows;
-	vector<cv::Point>::iterator d=contours[cIdx].begin();
-	while( d!=contours[cIdx].end() ) {
-   	    cv::Point v=(*d);
-		if(v.y<highestP.y){
-			highestP=v;
-			cout<<highestP.y<<endl;
+	highestP.y = frame.rows;
+	vector<cv::Point>::iterator d = contours[cIdx].begin();
+	while (d != contours[cIdx].end()) {
+   	    cv::Point v = (*d);
+		if(v.y < highestP.y) {
+			highestP = v;
+			cout << highestP.y << endl;
 		}
 		d++;	
-	}int n=0;
-	d=hullPoint[cIdx].begin();
-	while( d!=hullPoint[cIdx].end() ) {
-   	    cv::Point v=(*d);
-			cout<<"x " << v.x << " y "<<  v.y << " highestpY " << highestP.y<< "ytol "<<yTol<<endl;
-		if(v.y<highestP.y+yTol && v.y!=highestP.y && v.x!=highestP.x){
+	}
+    int n=0;
+	d = hullPoint[cIdx].begin();
+	while (d != hullPoint[cIdx].end()) {
+   	    cv::Point v = (*d);
+			cout << "x " << v.x << " y " << v.y << " highestpY " << highestP.y << "ytol " << yTol << endl;
+		if (v.y < highestP.y + yTol && v.y != highestP.y && v.x != highestP.x) {
 			n++;
 		}
 		d++;	
-	}if(n==0){
+	}
+    if (n == 0) {
 		fingerTips.push_back(highestP);
 	}
 }
 
 void HandGesture::drawFingertips(ImageSource *m){
 	cv::Point p;
-	int k=0;
 	for(int i=0;i<fingerTips.size();i++){
 		p=fingerTips[i];
 		putText(m->original,intToString(i),p-cv::Point(0,30),fontFace, 1.2f,Scalar(200,200,200),2);
@@ -281,6 +281,6 @@ void HandGesture::getFingertips(ImageSource *m){
 		i++;
    	}
 	if(fingerTips.size()==0){
-		checkForOneFinger(m);
+		checkForOneFinger(m -> original);
 	}
 }

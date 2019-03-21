@@ -6,7 +6,6 @@
 #include <vector>
 
 using namespace cv;
-using namespace std;
 
 class ImageSource {
 public:
@@ -14,8 +13,6 @@ public:
 	Mat downsampled;
 	Mat original;
 	Mat binary;
-    Mat displayed;
-	vector<Mat> bwList;
 };
 
 
